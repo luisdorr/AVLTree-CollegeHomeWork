@@ -71,8 +71,14 @@ public class AVLTree <T extends Comparable<T>>{
         return newRoot;
     }
 
-    public Node<T> doubleRightRotation(Node<T> root) {}
-    public Node<T> doubleLeftRotation(Node<T> root) {}
+    public Node<T> doubleRightRotation(Node<T> root) {
+        simpleLeftRotation(root.getLeftChild());
+        return simpleRightRotation(root);
+    }
+    public Node<T> doubleLeftRotation(Node<T> root) {
+        simpleRightRotation(root.getRightChild());
+        return simpleLeftRotation(root);
+    }
     // aqui e onde vamos optar qual forma de rotacao teremos que fazer
     public Node<T> treeRebalancing(Node<T> root) {
         int balanceFactor = root.getBalanceFactor(root, 0);
@@ -88,6 +94,7 @@ public class AVLTree <T extends Comparable<T>>{
             } else {
                 //simple
             }
+        }
         return root;
     }
 
