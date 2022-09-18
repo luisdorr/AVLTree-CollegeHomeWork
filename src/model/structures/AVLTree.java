@@ -84,15 +84,15 @@ public class AVLTree <T extends Comparable<T>>{
         int balanceFactor = root.getBalanceFactor(root, 0);
         if (balanceFactor == 2) {
             if(root.getLeftChild().getBalanceFactor(root, 0) < 0) {
-                //double
+                doubleRightRotation(root);
             } else {
-                //simple
+                simpleRightRotation(root);
             }
         } else if (balanceFactor == -2) {
             if(root.getLeftChild().getBalanceFactor(root, 0) > 0) {
-                //double
+                doubleLeftRotation(root);
             } else {
-                //simple
+                simpleLeftRotation(root);
             }
         }
         return root;
