@@ -33,6 +33,9 @@ public class AVLTree <T extends Comparable<T>>{
         // deve checar se esta desbalanceada, se estiver, deve rotacionar "Ha de implementar!"
         return root;
     }
+    public Node<T> Remove(Node<T> root, T key) {
+        return root;
+    }
    
     /* tentativa de procurar, mas sem recurcao
     public boolean lookFor(T key) {
@@ -53,6 +56,7 @@ public class AVLTree <T extends Comparable<T>>{
     }
      */
     
+
     public Node<T> simpleRightRotation(Node<T> root) {
         Node<T> newRoot = root.getLeftChild();
         Node<T> rootsNewLeftChild = newRoot.getRightChild();
@@ -61,7 +65,6 @@ public class AVLTree <T extends Comparable<T>>{
 
         return newRoot;
     }
-
     public Node<T> simpleLeftRotation(Node<T> root) {
         Node<T> newRoot = root.getRightChild();
         Node<T> rootsNewRightChild = newRoot.getLeftChild();
@@ -70,7 +73,6 @@ public class AVLTree <T extends Comparable<T>>{
 
         return newRoot;
     }
-
     public Node<T> doubleRightRotation(Node<T> root) {
         simpleLeftRotation(root.getLeftChild());
         return simpleRightRotation(root);
@@ -79,7 +81,7 @@ public class AVLTree <T extends Comparable<T>>{
         simpleRightRotation(root.getRightChild());
         return simpleLeftRotation(root);
     }
-    // aqui e onde vamos optar qual forma de rotacao teremos que fazer
+    
     public Node<T> treeRebalancing(Node<T> root) {
         int balanceFactor = root.getBalanceFactor(root, 0);
         if (balanceFactor == 2) {
