@@ -1,5 +1,7 @@
 package model.structures;
 
+import java.security.Key;
+
 import javax.management.RuntimeErrorException;
 
 public class AVLTree <T extends Comparable<T>>{
@@ -59,9 +61,28 @@ public class AVLTree <T extends Comparable<T>>{
                 root.setLeftChild(remove(root.getLeftChild(), key));
             }
         }
-        
+
         return treeRebalancing(root);
     }  
+
+    public Node<T> search(Node<T> root, T key) {
+        
+        if (root == null) {
+            System.out.println("This key is not in the tree.");
+            return root;
+        } else if (key.compareTo(root.getKey()) < 0) {
+            return search(root.getLeftChild(),key);
+
+        } else if (key.compareTo(root.getKey()) > 0) {
+            return search(root.getRightChild(),key);
+
+        } else if (key.compareTo(root.getKey()) == 0) {
+            return root;
+        }
+
+        return root;
+    }
+
 
     public Node<T> simpleRightRotation(Node<T> root) {
         Node<T> newRoot = root.getLeftChild();
