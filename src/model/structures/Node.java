@@ -1,11 +1,12 @@
 package model.structures;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
 public class Node <T extends Comparable<T>>{
     private Node<T> leftChild, rightChild;
     private T key;
     private int height;
-
-    private int balanceFactor = 0;
 
     public Node(T key) {
         this.key = key;
@@ -36,10 +37,10 @@ public class Node <T extends Comparable<T>>{
         } else {
             height++;
             setHeight(Math.max(
-                root.getLeftChild().getHeight(root.getLeftChild(), height),
-                root.getRightChild().getHeight(root.getRightChild(), height)
+                getHeight(root.getLeftChild(), height),
+                getHeight(root.getRightChild(), height)
                 ) - 1);
-            return this.height;
+            return height;
         }
     }
     public void setHeight(int height) {
@@ -77,12 +78,6 @@ public class Node <T extends Comparable<T>>{
     }
 
     public int getBalanceFactor(Node<T> node, int height) {
-        if (node == null) {
-            return height;
-
-        } else {
-            height++;
-            return getBalanceFactor(leftChild, height) - getBalanceFactor(rightChild, height);
-        }
+        return (node != null) ? getHeight(node.getLeftChild(),height) - getHeight(node.getRightChild(), height) : 0;
     }
 }

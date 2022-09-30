@@ -1,7 +1,5 @@
 package model.structures;
 
-import java.security.Key;
-
 import javax.management.RuntimeErrorException;
 
 public class AVLTree <T extends Comparable<T>>{
@@ -19,6 +17,8 @@ public class AVLTree <T extends Comparable<T>>{
         this.root = new Node(key);
     }
 
+    //GETTERS
+    public Node<T> getRoot(){return root;}
     //methods
     public int treeBalanceFactor() {
        return root.getBalanceFactor(root, 0);
@@ -33,7 +33,7 @@ public class AVLTree <T extends Comparable<T>>{
             root.setLeftChild(add(root.getLeftChild(),key));
         } else if (key.compareTo(root.getKey()) > 0) {
             root.setRightChild(add(root.getRightChild(),key));
-        } else if (key.compareTo(root.getKey()) == 0) {
+        } else if (key.compareTo(root.getKey()) == 0 && root != null) {
             throw new RuntimeErrorException(null, "THIS NUMBER ALREADY EXIST!");
         }
        
@@ -137,10 +137,6 @@ public class AVLTree <T extends Comparable<T>>{
         } else {
             return goToTheRightChild(root.getRightChild());
         }
-    }
-    @Override
-    public String toString() {
-        return root.toString()+"( ";
     }
 
 }
