@@ -30,8 +30,17 @@ public class Node <T extends Comparable<T>>{
     public void setKey(T key) {
         this.key = key;
     }
-    public int getHeight() {
-        return height;
+    public int getHeight(Node<T> root, int height) {
+        if (root == null) {
+            return height;
+        } else {
+            height++;
+            setHeight(Math.max(
+                root.getLeftChild().getHeight(root.getLeftChild(), height),
+                root.getRightChild().getHeight(root.getRightChild(), height)
+                ) - 1);
+            return this.height;
+        }
     }
     public void setHeight(int height) {
         this.height = height;

@@ -1,5 +1,7 @@
 package model.structures;
 
+import javax.management.RuntimeErrorException;
+
 public class AVLTree <T extends Comparable<T>>{
     private Node<T> root;
     private int hieght;
@@ -29,33 +31,37 @@ public class AVLTree <T extends Comparable<T>>{
             root.setLeftChild(add(root.getLeftChild(),key));
         } else if (key.compareTo(root.getKey()) > 0) {
             root.setRightChild(add(root.getRightChild(),key));
+        } else if (key.compareTo(root.getKey()) == 0) {
+            throw new RuntimeErrorException(null, "THIS NUMBER ALREADY EXIST!");
         }
-        // deve checar se esta desbalanceada, se estiver, deve rotacionar "Ha de implementar!"
-        return root;
+       
+        return treeRebalancing(root);
     }
-    public Node<T> Remove(Node<T> root, T key) {
-        return root;
-    }
-   
-    /* tentativa de procurar, mas sem recurcao
-    public boolean lookFor(T key) {
-        Node<T> node = this.root;
 
-        while (node != null && key != node.getKey()) {
-            if (key.compareTo(node.getKey()) < 0) {
-                node = node.getLeftChild();
-            } else if (key.compareTo(node.getKey()) > 0) {
-                node = node.getRightChild();
+    public Node<T> remove(Node<T> root, T key) {
+        if (root == null) {
+            System.out.println("This key is not in the tree.");
+            return root;
+
+        } else if (key.compareTo(root.getKey()) < 0) {
+            root.setLeftChild(remove(root.getLeftChild(),key));
+
+        } else if (key.compareTo(root.getKey()) > 0) {
+            root.setRightChild(remove(root.getRightChild(),key));
+
+        } else if (key.compareTo(root.getKey()) == 0) {
+            if(root.getLeftChild() == null || root.getRightChild() == null) {
+                root = (root.getLeftChild() == null) ? root.getRightChild() : root.getLeftChild();
+            } else {
+                T copyKey = getTheBiggestLeftChild(root).getKey();
+                root.setKey(copyKey);
+                
+                root.setLeftChild(remove(root.getLeftChild(), key));
             }
         }
-        if (root == null) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-     */
-    
+        
+        return treeRebalancing(root);
+    }  
 
     public Node<T> simpleRightRotation(Node<T> root) {
         Node<T> newRoot = root.getLeftChild();
@@ -98,6 +104,22 @@ public class AVLTree <T extends Comparable<T>>{
             }
         }
         return root;
+    }
+
+    public Node<T> getTheBiggestLeftChild(Node<T> root){
+        return goToTheRightChild(root.getLeftChild());
+    }
+
+    public Node<T> goToTheRightChild(Node<T> root) {
+        if (root.getRightChild() == null) {
+            return root;
+        } else {
+            return goToTheRightChild(root.getRightChild());
+        }
+    }
+    @Override
+    public String toString() {
+        return root.toString()+"( ";
     }
 
 }
