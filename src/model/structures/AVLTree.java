@@ -1,7 +1,5 @@
 package model.structures;
 
-import javax.management.RuntimeErrorException;
-
 public class AVLTree <T extends Comparable<T>>{
     private Node<T> root;
     private int hieght;
@@ -18,11 +16,36 @@ public class AVLTree <T extends Comparable<T>>{
     }
 
     //GETTERS
-    public Node<T> getRoot(){return root;}
-    //methods
-    public int treeBalanceFactor() {
-       return root.getBalanceFactor(root, 0);
+    public Node<T> getRoot(){
+        return root;
     }
+
+    private int height(Node<T> node) {
+        if (node != null) {
+            return node.getHeight();
+        } else {
+            return 0;
+        }
+    }
+    public void heightUpdate(Node<T> node) {
+        int newHeight = Math.max( height(node.getLeftChild()), height(node.getRightChild()) );
+        node.setHeight(newHeight + 1);
+    }
+
+    public int balance(Node<T> node) {
+        return root != null ? height(node.getLeftChild()) - height(node.getRightChild()) : 0;
+    }
+
+    public void printTree(Node<T> root, int height) {
+        if (root != null){
+            height++;
+            System.out.println(makeSpaces(height) + root);
+            printTree(root.getLeftChild(),height);
+            printTree(root.getRightChild(), height);
+        }
+    }
+
+    //methods
 
     public Node<T> add(Node<T> root, T key) {
         if (root == null) {
@@ -34,10 +57,10 @@ public class AVLTree <T extends Comparable<T>>{
         } else if (key.compareTo(root.getKey()) > 0) {
             root.setRightChild(add(root.getRightChild(),key));
         } else if (key.compareTo(root.getKey()) == 0 && root != null) {
-            throw new RuntimeErrorException(null, "THIS NUMBER ALREADY EXIST!");
+            System.out.println( "THIS NUMBER ALREADY EXIST!");
         }
-       
-        return treeRebalancing(root);
+        treeRebalancing(root);
+        return root;
     }
 
     public Node<T> remove(Node<T> root, T key) {
@@ -83,12 +106,22 @@ public class AVLTree <T extends Comparable<T>>{
         return root;
     }
 
+    public void inOrder(Node<T> root) {
+		if (root != null) {
+			inOrder(root.getLeftChild());
+			System.out.print(root.getKey() + " ");
+			inOrder(root.getRightChild());
+        }
+	}
 
+    //ROTATIONS
     public Node<T> simpleRightRotation(Node<T> root) {
         Node<T> newRoot = root.getLeftChild();
         Node<T> rootsNewLeftChild = newRoot.getRightChild();
         newRoot.setRightChild(root);
         root.setLeftChild(rootsNewLeftChild);
+        heightUpdate(root);
+        heightUpdate(newRoot);
 
         return newRoot;
     }
@@ -97,6 +130,8 @@ public class AVLTree <T extends Comparable<T>>{
         Node<T> rootsNewRightChild = newRoot.getLeftChild();
         newRoot.setLeftChild(root);
         root.setRightChild(rootsNewRightChild);
+        heightUpdate(root);
+        heightUpdate(newRoot);
 
         return newRoot;
     }
@@ -109,16 +144,17 @@ public class AVLTree <T extends Comparable<T>>{
         return simpleLeftRotation(root);
     }
     
+
     public Node<T> treeRebalancing(Node<T> root) {
-        int balanceFactor = root.getBalanceFactor(root, 0);
-        if (balanceFactor == 2) {
-            if(root.getLeftChild().getBalanceFactor(root, 0) < 0) {
+        int balanceFactor = balance(root);
+        if (balanceFactor >= 2) {
+            if(balance(root.getLeftChild()) < 0) {
                 doubleRightRotation(root);
             } else {
                 simpleRightRotation(root);
             }
-        } else if (balanceFactor == -2) {
-            if(root.getLeftChild().getBalanceFactor(root, 0) > 0) {
+        } else if (balanceFactor <= -2) {
+            if(balance(root.getRightChild()) > 0) {
                 doubleLeftRotation(root);
             } else {
                 simpleLeftRotation(root);
@@ -130,7 +166,6 @@ public class AVLTree <T extends Comparable<T>>{
     public Node<T> getTheBiggestLeftChild(Node<T> root){
         return goToTheRightChild(root.getLeftChild());
     }
-
     public Node<T> goToTheRightChild(Node<T> root) {
         if (root.getRightChild() == null) {
             return root;
@@ -138,5 +173,15 @@ public class AVLTree <T extends Comparable<T>>{
             return goToTheRightChild(root.getRightChild());
         }
     }
+
+    public String makeSpaces(int height) {
+        String space = "";
+        for(int i = 0; i < height; i++) {
+            space = space + "    ";
+        }
+        return space;
+    }
+
+
 
 }

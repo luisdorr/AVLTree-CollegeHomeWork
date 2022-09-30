@@ -6,7 +6,7 @@ import java.io.OutputStreamWriter;
 public class Node <T extends Comparable<T>>{
     private Node<T> leftChild, rightChild;
     private T key;
-    private int height;
+    private int height = 1;
 
     public Node(T key) {
         this.key = key;
@@ -31,21 +31,13 @@ public class Node <T extends Comparable<T>>{
     public void setKey(T key) {
         this.key = key;
     }
-    public int getHeight(Node<T> root, int height) {
-        if (root == null) {
-            return height;
-        } else {
-            height++;
-            setHeight(Math.max(
-                getHeight(root.getLeftChild(), height),
-                getHeight(root.getRightChild(), height)
-                ) - 1);
-            return height;
-        }
+    public int getHeight() {
+        return height;
     }
     public void setHeight(int height) {
         this.height = height;
     }
+   
 
     @Override
     public String toString() {
@@ -77,7 +69,5 @@ public class Node <T extends Comparable<T>>{
         return true;
     }
 
-    public int getBalanceFactor(Node<T> node, int height) {
-        return (node != null) ? getHeight(node.getLeftChild(),height) - getHeight(node.getRightChild(), height) : 0;
-    }
+    
 }
