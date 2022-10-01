@@ -2,7 +2,7 @@ package model.structures;
 
 public class AVLTree <T extends Comparable<T>>{
     private Node<T> root;
-    private int hieght;
+    private int height;
 
     //constructors
     public AVLTree() {
@@ -33,7 +33,37 @@ public class AVLTree <T extends Comparable<T>>{
     }
 
     public int balance(Node<T> node) {
-        return root != null ? height(node.getLeftChild()) - height(node.getRightChild()) : 0;
+        return (root != null) ? height(node.getLeftChild()) - height(node.getRightChild()) : 0;
+    }
+
+    public int getBalanceFactor(Node<T> node) {
+        if (node == null) {
+            return 0;
+
+        } else {
+            int leftHeight = getBalanceFactor(node.getLeftChild()) + 1;
+            int rightHeight = getBalanceFactor(node.getRightChild()) + 1;
+            return Math.max(leftHeight, rightHeight);
+        }
+        
+    }
+
+    public Node<T> treeRebalancing(Node<T> root) {
+        int balanceFactor = getBalanceFactor(root);
+        if (balanceFactor >= 2) {
+            if(getBalanceFactor(root.getLeftChild()) < 0) {
+                doubleRightRotation(root);
+            } else {
+                simpleRightRotation(root);
+            }
+        } else if (balanceFactor <= -2) {
+            if(getBalanceFactor(root.getRightChild()) > 0) {
+                doubleLeftRotation(root);
+            } else {
+                simpleLeftRotation(root);
+            }
+        }
+        return root;
     }
 
     public void printTree(Node<T> root, int height) {
@@ -142,25 +172,6 @@ public class AVLTree <T extends Comparable<T>>{
     public Node<T> doubleLeftRotation(Node<T> root) {
         simpleRightRotation(root.getRightChild());
         return simpleLeftRotation(root);
-    }
-    
-
-    public Node<T> treeRebalancing(Node<T> root) {
-        int balanceFactor = balance(root);
-        if (balanceFactor >= 2) {
-            if(balance(root.getLeftChild()) < 0) {
-                doubleRightRotation(root);
-            } else {
-                simpleRightRotation(root);
-            }
-        } else if (balanceFactor <= -2) {
-            if(balance(root.getRightChild()) > 0) {
-                doubleLeftRotation(root);
-            } else {
-                simpleLeftRotation(root);
-            }
-        }
-        return root;
     }
 
     public Node<T> getTheBiggestLeftChild(Node<T> root){
