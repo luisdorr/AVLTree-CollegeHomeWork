@@ -9,7 +9,8 @@ public class Program {
         AVLTree<Integer> avore = new AVLTree<>(50);
         avore.add(avore.getRoot(), 21);
         avore.add(avore.getRoot(), 12);
-       
+        avore.treeRebalancing(avore.getRoot());
+
         /*avore.add(avore.getRoot(), 60);
         avore.add(avore.getRoot(), 55);
         avore.add(avore.getRoot(), 57);
@@ -17,6 +18,7 @@ public class Program {
 
         
         avore.printTree(avore.getRoot(), 0);
+        System.out.println(avore.getRoot().getLeftChild());
         
         
 

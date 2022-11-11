@@ -36,33 +36,36 @@ public class AVLTree <T extends Comparable<T>>{
         return (root != null) ? height(node.getLeftChild()) - height(node.getRightChild()) : 0;
     }
 
-    public int getBalanceFactor(Node<T> node) {
-        if (node == null) {
+    public int getNodeHeight(Node<T> root){
+        if (root == null) {
             return 0;
 
         } else {
-            int leftHeight = getBalanceFactor(node.getLeftChild()) + 1;
-            int rightHeight = getBalanceFactor(node.getRightChild()) + 1;
+            int leftHeight = getNodeHeight(root.getLeftChild()) + 1;
+            int rightHeight = getNodeHeight(root.getRightChild()) + 1;
             return Math.max(leftHeight, rightHeight);
         }
-        
+    }
+
+    public int getBalanceFactor(Node<T> node) {
+        return getNodeHeight(node.getLeftChild()) - getNodeHeight(node.getRightChild());
     }
 
     public Node<T> treeRebalancing(Node<T> root) {
-        int balanceFactor = getBalanceFactor(root);
-        if (balanceFactor >= 2) {
+        if (getBalanceFactor(root) == 2) {
             if(getBalanceFactor(root.getLeftChild()) < 0) {
                 doubleRightRotation(root);
             } else {
-                simpleRightRotation(root);
+                return simpleRightRotation(root);
             }
-        } else if (balanceFactor <= -2) {
+        } else if (getBalanceFactor(root) == -2) {
             if(getBalanceFactor(root.getRightChild()) > 0) {
-                doubleLeftRotation(root);
+                return doubleLeftRotation(root);
             } else {
-                simpleLeftRotation(root);
+                return simpleLeftRotation(root);
             }
         }
+
         return root;
     }
 
@@ -89,7 +92,7 @@ public class AVLTree <T extends Comparable<T>>{
         } else if (key.compareTo(root.getKey()) == 0 && root != null) {
             System.out.println( "THIS NUMBER ALREADY EXIST!");
         }
-        treeRebalancing(root);
+
         return root;
     }
 
